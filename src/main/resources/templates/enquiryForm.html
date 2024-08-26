@@ -1,77 +1,164 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Add Enquiry</title>
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-	rel="stylesheet"
-	integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-	crossorigin="anonymous">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Add Enquiry</title>
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+        crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #f4f7f6;
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            background-color: #343a40; /* Darker background for contrast */
+        }
+        .navbar-brand {
+            color: #f8f9fa !important;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        .navbar-brand:hover {
+            color: #e9ecef !important;
+        }
+        .nav-link {
+            color: #f8f9fa !important;
+        }
+        .nav-link.active {
+            color: #ffc107 !important; /* Highlight active link */
+        }
+        .nav-link:hover {
+            color: #e9ecef !important;
+        }
+        .form-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+        .form-container h2 {
+            margin-bottom: 20px;
+            font-size: 2rem;
+            font-weight: 600;
+            color: #333;
+        }
+        .form-label {
+            font-weight: 500;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .error-message, .success-message {
+            font-weight: 500;
+            border-radius: 0.375rem;
+        }
+        .error-message {
+            color: #dc3545;
+        }
+        .success-message {
+            color: #28a745;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #6c757d;
+        }
+    </style>
 </head>
 <body>
-	<div class="container">
-		<ul class="nav">
-			<li class="nav-item"><a class="nav-link active"
-				aria-current="page" href="dashboard">View Dashboard</a></li>
-			<li class="nav-item"><a class="nav-link" href="enquiry">Add
-					Enq</a></li>
-			<li class="nav-item"><a class="nav-link" href="viewEnqs">View
-					Enq</a></li>
-			<li class="nav-item"><a class="nav-link" href="logout">Logout</a></li>
-		</ul>
-		<h2>Adding New Enquiry</h2>
-		<p style="color: red" th:text="${emgs}"></p>
-		<p style="color: green" th:text="${smgs}"></p>
-		<form th:action="@{/addEnquiry}" th:object="${enquiry}" method="post">
-			<table>
-				<tr>
-					<td>Name:</td>
-					<td><input type="text" th:field="*{stuName}"> <input
-						type="hidden" th:field="*{enquiryId}"></td>
-				</tr>
-				<tr>
-					<td>Phno:</td>
-					<td><input type="number" th:field="*{stuPhno}"></td>
-				</tr>
-				<tr>
-					<td>Class Mode:</td>
-					<td><select th:field="*{classMode}">
-							<option value="">-select-</option>
-							<option value="Online">Online</option>
-							<option value="Offline">Offline</option>
-					</select></td>
-				</tr>
-				<tr>
-					<td>Course Name :</td>
-					<td><select th:field="*{courseName}">
-							<option value="">-select-</option>
-							<option value="Java">Java</option>
-							<option value="JRTP">JRTP</option>
-							<option value="AWS">AWS</option>
-							<option value="Angular">Angular</option>
-					</select></td>
-				</tr>
-				<tr>
-					<td>Enquiry :</td>
-					<td><select th:field="*{enqStatus}">
-							<option value="">-select-</option>
-							<option value="Open">Open</option>
-							<option value="Enrolled">Enrolled</option>
-							<option value="Lost">Lost</option>
-					</select></td>
-				</tr>
-				<tr>
-					<td></td>
-					<td><input value="Save" type="submit" class="btn btn-primary"></td>
-				</tr>
-			</table>
-		</form>
-	</div>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Enquiry Form</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard">Dashboard Overview</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="enquiry">Create Enquiry</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="viewEnqs">Enquiries List</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="logout">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="form-container">
+            <h2 class="my-4" th:text="${isEdit ? 'Update Enquiry' : 'Adding New Enquiry'}">Adding New Enquiry</h2>
+            <!-- Error and Success Messages -->
+            <div class="mb-4">
+                <!-- Error message -->
+                <p class="error-message" th:text="${emgs}"></p>
+                <!-- Success message -->
+                <p class="success-message" th:text="${smgs}"></p>
+            </div>
+            <form th:action="@{/addEnquiry}" th:object="${enquiry}" method="post">
+            	<input type="hidden" name="isEdit" th:value="${isEdit}"/>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label" for="stuName">Name</label>
+                        <input type="text" id="stuName" th:field="*{stuName}" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="stuPhno">Phone Number</label>
+                        <input type="number" id="stuPhno" th:field="*{stuPhno}" class="form-control" required>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label" for="classMode">Class Mode</label>
+                        <select id="classMode" th:field="*{classMode}" class="form-select" required>
+                            <option value="">- Select -</option>
+                            <option value="Online">Online</option>
+                            <option value="Offline">Offline</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="courseName">Course Name</label>
+                        <select id="courseName" th:field="*{courseName}" class="form-select" required>
+                            <option value="">- Select -</option>
+                            <option value="Java">Java</option>
+                            <option value="JRTP">JRTP</option>
+                            <option value="AWS">AWS</option>
+                            <option value="Angular">Angular</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="enqStatus">Enquiry Status</label>
+                    <select id="enqStatus" th:field="*{enqStatus}" class="form-select" required>
+                        <option value="">- Select -</option>
+                        <option value="Open">Open</option>
+                        <option value="Enrolled">Enrolled</option>
+                        <option value="Lost">Lost</option>
+                    </select>
+                </div>
+                <input type="hidden" th:field="*{enquiryId}">
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+        </div>
+    </div>
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
 </body>
-<script
-	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-	integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-	crossorigin="anonymous"></script>
 </html>

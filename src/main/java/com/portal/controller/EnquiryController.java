@@ -29,29 +29,54 @@ public class EnquiryController {
 	public String addEnquiryPage(Model model) {
 
 		Enquiry enquiry = new Enquiry();
-
+		
 		model.addAttribute("enquiry", enquiry);
+		 model.addAttribute("isEdit", false);
 
 		return "enquiryForm";
 	}
 
 	@PostMapping("/addEnquiry")
-	public String saveEnquiry(@ModelAttribute("enquiry") Enquiry enquiry, HttpServletRequest req, Model model)
+	public String saveEnquiry(@ModelAttribute("enquiry") Enquiry enquiry,@RequestParam(value = "isEdit", required = false) Boolean isEdit,  HttpServletRequest req, Model model)
 			throws Exception {
 
 		HttpSession session = req.getSession(false);
 		Integer counsellorId = (Integer) session.getAttribute("counsellorId");
+		
+		boolean isSaved;
 
+	    if (Boolean.TRUE.equals(isEdit)) {
+	        // Update existing enquiry
+	        isSaved = enquiryService.addEnquiry(enquiry, counsellorId);
+	        if (isSaved) {
+	            model.addAttribute("smgs", "Enquiry Updated..!!");
+	        } else {
+	            model.addAttribute("emgs", "Failed to update enquiry");
+	        }
+	    } else {
+	        // Add new enquiry
+	        isSaved = enquiryService.addEnquiry(enquiry, counsellorId);
+	        if (isSaved) {
+	            model.addAttribute("smgs", "Enquiry Added..!!");
+	        } else {
+	            model.addAttribute("emgs", "Failed to add enquiry");
+	        }
+	    }
+		
+        /*
 		boolean isSaved = enquiryService.addEnquiry(enquiry, counsellorId);
 
 		if (isSaved) {
 			model.addAttribute("smgs", "Enquiry Added..!!");
 		} else {
 			model.addAttribute("emgs", "Failed to add enquiry");
-		}
-		enquiry = new Enquiry();
-
-		model.addAttribute("enquiry", enquiry);
+		}*/
+		
+		
+	    model.addAttribute("isEdit", isEdit);
+		model.addAttribute("enquiry", new Enquiry());
+		
+		
 		return "enquiryForm";
 
 	}
@@ -91,6 +116,7 @@ public class EnquiryController {
 
 		Enquiry enquiry = enquiryService.getEnquiryById(enquiryId);
 		model.addAttribute("enquiry", enquiry);
+		model.addAttribute("isEdit", true);
 		return "enquiryForm";
 	}
 
